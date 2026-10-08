@@ -1,84 +1,43 @@
 <!DOCTYPE html>
-<html lang="pt-br">
+<html lang="en">
 
 <head>
   <meta charset="UTF-8">
-  <title>Curadoria JWT</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
 </head>
 
 <body>
-  <h1>tentativa de colocar os items aqui em baixo ⬇️⬇️⬇️ 🛐📿</h1>
-  <div id="items">
+  <nav>
+    <input type="button" onclick="cadastro_usuario()" value="Cadastro">
+    <input type="button" onclick="login()" value="Login">
+    <input type="button" onclick="cadastro_item()" value="Cadastrar Itens">
+    <input type="button" onclick="listar_itens()" value="Listar Itens">
+  </nav>
+
+  <div id="div_cadastro_usuario">
+    <form id="form_cadastro_usuario">
+      <label for="name">Nome:</label>
+      <input type="text" name="name" id="name">
+
+      <label for="email">E-Mail</label>
+      <input type="text" name="email" id="email">
+
+      <hr>
+
+      <label for="password">Senha</label>
+      <input type="password" name="password" id="password">
+
+      <label for="confirma_password">Confirmar Senha</label>
+      <input type="password" name="confirma_password" id="confirma_password">
+
+      <input type="button" value="Cadastrar" onclick="processa_cadastro_usuario()">
+    </form>
 
   </div>
 
-  <script>
-  let global_token;
-
-    async function login() {
-
-      const dadinhos = { 
-      "email": "tobizin@gmail.com",
-      "password": "123"
-    }
-
-      const requisicao = await fetch('http://localhost:3001/auth/login',
-        {
-          method: 'POST',
-          headers: {
-            'Content-Type': `application/json`//indica o que deve ser enviado
-          },
-          body: JSON.stringify(dadinhos)
-        }
-      )
-    
-      if(!requisicao.ok){
-        return console.log("o token nao pode ser enviado resolve ai porra (┬┬﹏┬┬)")
-      }
-      const resposta = await requisicao.json();
-      global_token = resposta.accessToken;
-      console.log(global_token)
-    };
-   
-  
- 
-
-    async function carregarItemns() {
-      
-
-      const requisicao = await fetch('http://localhost:3001/items/',
-        {
-          method: 'GET',
-          headers: {
-            'Authorization': `Bearer ${global_token}`,
-            'Content-Type': `application/json`//indica o que deve ser enviado
-          }
-        }
-      );
-
-      if (!requisicao.ok) {
-        return console.log("deu ruim ai aruma seu merda")
-      }
-      let dados = await requisicao.json();
-      //console.log(JSON.stringify(dados));
-
-      const divItens = document.getElementById("items")
-
-      divItens.innerHTML = dados.map(item => `
-  <h1>titulo:${item.title}<h1>
-    <h2>foto:<a href='${item.url}'> ${item.url} </a><h2>
-        <h3>tags:${item.tags}<h3>
-        <h3>notas:${item.notes}<h3>`)
-    }
-    async function inicio() {
-      await login();
-      await carregarItemns();
-      
-    }
-   inicio();
-
-
-  </script>
+  <script src="./controle_api.js"></script>
+  <script src="./controle_telas.js"></script>
 
 </body>
 

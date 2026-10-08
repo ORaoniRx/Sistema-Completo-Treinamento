@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=<device-width>, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h2> Listagem </h2>
+    <div id="items">
+        <div ></div>
+    </div>
+    <script>
+        let global_token;
+
+        async function login(){
+            const dados_login = {
+                "email":"wygor@wygor.com.br",
+                "password":"1234"
+            }
+
+            const requisicao = await fetch('http://localhost:3001/auth/login',
+                                           {
+                                                method : 'POST',
+                                                headers: {
+                                                    'Content-Type':'application/json'
+                                                },
+                                                body: JSON.stringify(dados_login)
+                                           }
+            )
+            
+            if (!requisicao.ok){
+                return 1
+            }
+
+            const resposta = await requisicao.json();
+            global_token = resposta.accessToken;
+            console.log(global_token)
+        }
+
+        async function carregar_items(){
+
+            const requisicao = await fetch('http://localhost:3001/items/',
+                                           {
+                                                method: 'GET',
+                                                headers: {
+                                                    'Authorization': `Bearer ${global_token}`,
+                                                    'Content-Type': 'application/json' // Indica que espera/envia JSON
+                                                }
+                                            }
+            );
+            
+            if (!requisicao.ok){
+                return 1;
+            }
+
+            let dados = await requisicao.json();
+            console.log(JSON.stringify(dados));
+
+            const div_items = document.getElementById("items");
+            div_items.innerHTML = dados.map(item => `
+                <h3 style="color: #54F527;">${item.title}<h3> 
+                <h2><a href='${item.url}'> ${item.url} </a><h2> 
+                <h2>${item.notes}<h2> 
+                <h2>${item.tags}<h2> 
+            `)
+        }
+
+        async function inicio(){
+            await login();
+            await carregar_items();
+        }
+
+        inicio();
+
+        
+    </script>
+</body>
+</html>
