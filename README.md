@@ -1,0 +1,1 @@
+# Servidor Local + Backend funcionando, o Banco utilizado é o da minha conta do supabase.
