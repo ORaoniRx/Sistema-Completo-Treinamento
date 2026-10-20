@@ -16,73 +16,82 @@ async function processa_login() {
     rota_api_login(corpo_payload)
 };
 
-async function listar_itens() {
-    try {
-        const resposta = await fetch('http://localhost:3001/items/');
+async function carregar_itens_tela() {
 
-        const dadosJson = await resposta.json();
+    let itens = await rota_api_list_items();
 
-        const htmlDiv = `
-        <!DOCTYPE html>
+    content.innerHTML = `
+    <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
-    <title>Listagem de Dados</title>
+    <title>Listagem de Dados do Servidor</title>
     <style>
-        table { 
-            width: 100%; 
-            border-collapse: collapse; 
-            margin-top: 20px; 
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
             font-family: Arial, sans-serif;
         }
-        th, td { 
-            border: 1px solid #ddd; 
-            padding: 12px; 
-            text-align: left; 
+        th, td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: left;
         }
-        th { 
-            background-color: #f2f2f2; 
+        th {
+            background-color: #007BFF;
+            color: white;
             font-weight: bold;
         }
-        tr:nth-child(even) { 
-            background-color: #f9f9f9; 
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        .mensagem-erro {
+            color: red;
+            font-weight: bold;
+            margin-bottom: 15px;
         }
     </style>
 </head>
 <body>
 
-    <h2>Tabela de Usuários</h2>
-    
+    <h2>Tabela de Itens do Back-end</h2>
+
+    <!-- Se houver algum erro de conexão ou token, exibe a mensagem aqui -->
+    <% if (typeof erro !== 'undefined') { %>
+        <p class="mensagem-erro"><%= erro %></p>
+    <% } %>
+
     <table>
         <thead>
             <tr>
                 <th>ID</th>
-                <th>Nome</th>
-                <th>E-mail</th>
+                <th>Nome do Produto</th>
+                <th>Preço</th>
             </tr>
         </thead>
         <tbody>
-            <!-- Exemplo de como as linhas ficarão visualmente -->
-            <tr>
-                <td>1</td>
-                <td>João Silva</td>
-                <td>joao@email.com</td>
-            </tr>
-            <tr>
-                <td>2</td>
-                <td>Maria Souza</td>
-                <td>maria@email.com</td>
-            </tr>
+            <% if (items.length === 0) { %>
+                <tr>
+                    <td colspan="3" style="text-align: center;">Nenhum registro encontrado.</td>
+                </tr>
+            <% } else { %>
+                <!-- O servidor roda este loop e cria as linhas da tabela dinamicamente -->
+                <% items.forEach(function(item) { %>
+                    <tr>
+                        <!-- Altere 'item.id', 'item.nome' e 'item.preco' pelas chaves exatas do seu JSON -->
+                        <td><%= item.id %></td>
+                        <td><%= item.nome %></td>
+                        <td>R$ <%= item.preco %></td>
+                    </tr>
+                <% }); %>
+            <% } %>
         </tbody>
     </table>
 
 </body>
 </html>
-
-        `
-    } catch {
-        
-    }
+    `
 
 
 }

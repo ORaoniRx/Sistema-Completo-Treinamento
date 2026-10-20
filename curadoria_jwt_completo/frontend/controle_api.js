@@ -46,4 +46,28 @@ async function rota_api_login(dados_login){
         console.error(e.message);
         return "Erro ao fazer login do usuário";
     }
+
+    
+}
+
+async function rota_api_list_items(dados_items) {
+    const meuToken = localStorage.getItem('accessToken');
+
+    try {
+        const dados_itens = await fetch('http://localhost:3001/items/', {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+
+                'Authorization': `Bearer ${meuToken}`
+            },
+            body: JSON.stringify(dados_items)
+        })
+
+        return dados_itens;
+    } catch {}
+
+
+    
+    
 }
