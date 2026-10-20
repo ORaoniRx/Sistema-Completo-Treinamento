@@ -5,4 +5,13 @@ async function processa_cadastro_usuario() {
     console.log(corpo_payload);
 
     rota_api_register(corpo_payload)
+};
+
+async function processa_login() {
+    const form_login = document.getElementById('form_login');
+    const dados_form = new FormData (form_login);
+    const corpo_payload = Object.fromEntries (dados_form.entries());
+    console.log(corpo_payload);
+
+    rota_api_login(corpo_payload)
 }
