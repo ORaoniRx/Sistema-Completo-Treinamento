@@ -34,15 +34,13 @@ async function rota_api_login(dados_login){
 
         const resposta = await requisicao.json();
         console.log(resposta)
+
+        const acessToken = resposta.accessToken;
+
+        localStorage.setItem('accessToken', acessToken);
+
+        console.log("Token salvo!");
         return "Usuário logado";
-
-        const dados_para_acesstok = await resposta.json();
-
-        const acessToken = dados_para_acesstok.acessToken;
-
-        localStorage.setItem('acessToken', acessToken);
-
-        console.log('Token salvo!')
 
     } catch (a) {
         console.error(e.message);
